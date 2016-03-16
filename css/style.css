@@ -1,12 +1,12 @@
 html, body {
-    padding-top: 40px;
-    padding-bottom: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .jumbotron {
-  background-image: url(https://source.unsplash.com/category/technology/600x300);
+  background-image: url(https://source.unsplash.com/category/nature/600x300);
   background-position: 70% 0;
-  height: 450px;
+  height: 250px;
   background-repeat: no-repeat;
   background-attachment: fixed;
   -webkit-background-size: cover;
