@@ -20,6 +20,10 @@ a {
     margin: 5px;
 }
 
+.temp {
+    font-size: 2em;
+}
+
 @media (max-width: 400px) {
     .jumbotron {
         height: 350px;
