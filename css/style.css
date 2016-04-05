@@ -3,11 +3,6 @@ html, body {
     padding-bottom: 20px;
 }
 
-.jumbotron {
-    height: 200px;
-}
-
-
 .white {
     color: #fff;
 }
@@ -20,13 +15,22 @@ a {
     margin: 5px;
 }
 
+.highlight {
+    color: #71a8b9;
+}
+
+.jumbotron {
+  height: 500px;
+}
+
+.location {
+  padding-bottom: 20px;
+}
+
 .temp {
     font-size: 2em;
 }
 
-@media (max-width: 400px) {
-    .jumbotron {
-        height: 350px;
-    }
-
+.wi {
+  font-size: 6em;
 }
