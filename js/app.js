@@ -7,24 +7,18 @@
     var lat = position.coords.latitude;
     var lon = position.coords.longitude;
 
-    console.log("latitude is :", lat, " And longitude is: ", lon);
-
-
     var config = {
       baseUrl: 'https://api.openweathermap.org/data/2.5/weather?',
       apiKey: 'a0c73d6d433683c9d60648536464f183',
     };
 
-
     var url = config.baseUrl + 'lat=' + lat + '&lon=' + lon + '&units=metric' + '&appid=' + config.apiKey;
-
 
     // Using the new fetch API 
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 
     fetch(url).then(
       function(response) {
-        console.log(response)
         return response.json();
       }
     ).then(
@@ -49,6 +43,42 @@
         // Finally attach the prefix
         icon = prefix + icon;
 
+        // Set the temperature
+        var celsius = jsonData.main.temp;
+
+        // F = C x 1.8 + 32
+        var farenheit = celsius * 1.8 + 32
+
+        var currentTemperature = celsius;
+
+        var units = document.createElement('div');
+        units.className = 'units';
+
+        var celsiusElement = document.createElement('a');
+        celsiusElement.className = 'celsius';
+        celsiusElement.href = '#';
+        celsiusElement.textContent = 'C';
+        var divider = document.createElement('span');
+        divider.textContent = '|';
+        var farenheitElement = document.createElement('a');
+        farenheitElement.className = 'farenheit';
+        farenheitElement.href = '#';
+        farenheitElement.textContent = 'F';
+
+        units.appendChild(celsiusElement);
+        units.appendChild(divider);
+        units.appendChild(farenheitElement);
+
+
+        
+
+
+        // Create the neceesary elements and then add them to the DOM
+        var temperatureELement = document.createElement('p');
+        temperatureELement.id = 'temperature';
+        // temperatureELement += '°' + units
+        temperatureELement.textContent = currentTemperature + '°';
+
         var weatherElement = document.createElement('i');
         weatherElement.className = icon
 
@@ -56,16 +86,44 @@
         locationElement.textContent = 'It looks like you\'re located in ' + location + ', ' + countryCode + '.';
 
         // Remove the loader spinner
-        console.log(ajaxPanel)
         ajaxPanel.innerHTML = '';
 
         ajaxPanel.appendChild(weatherElement);
+        ajaxPanel.appendChild(temperatureELement);
+        ajaxPanel.appendChild(units);
         ajaxPanel.appendChild(locationElement);
+
+
+        var temperatureSelect = function(unit) {
+          if (unit === 'c') {
+            currentTemperature = celsius;
+          } else {
+            currentTemperature = farenheit.toFixed(1);
+          }
+
+          return currentTemperature;
+
+        }
+
+        celsiusElement.addEventListener('click', function() {
+          document.getElementById('temperature')
+            .textContent = temperatureSelect('c');
+        });
+
+
+        farenheitElement.addEventListener('click', function() {
+          document.getElementById('temperature')
+            .textContent = temperatureSelect('f');
+        });
+
+
       }
+
     ).catch(function(error) {
       console.log("Something went wrong. ", error)
       ajaxPanel.innerHTML = '<p class="text-danger text-center">Geolocation is not supported by your Browser, or was canceled by user.</p>';
     });
+
   }
 
   function error() {
