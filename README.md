@@ -1,7 +1,7 @@
 # A simple weather app that uses the [OpenWeatherMap API](https://openweathermap.org/current)
 
-##
-
+## Quickstart
+- Clone the repository and open `index.html` in a Browser window
 
 ### Details
 
