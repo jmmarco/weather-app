@@ -101,7 +101,7 @@
             currentTemperature = farenheit.toFixed(1);
           }
 
-          return currentTemperature;
+          return currentTemperature + '°';
 
         }
 
