@@ -70,9 +70,6 @@
         units.appendChild(farenheitElement);
 
 
-        
-
-
         // Create the neceesary elements and then add them to the DOM
         var temperatureELement = document.createElement('p');
         temperatureELement.id = 'temperature';
@@ -83,6 +80,7 @@
         weatherElement.className = icon
 
         var locationElement = document.createElement('p');
+        locationElement.className = 'location';
         locationElement.textContent = 'It looks like you\'re located in ' + location + ', ' + countryCode + '.';
 
         // Remove the loader spinner
