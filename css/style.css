@@ -8,17 +8,17 @@ body {
   font-size: 3em;
 }
 
+h1 {
+  letter-spacing: 0.1em;
+}
+
 .jumbotron {
-  height: 500px;
+  height: 600px;
 }
 
 .jumbotron a {
   margin: 5px;
   text-decoration: none;
-}
-
-.highlight {
-  color: #71a8b9;
 }
 
 .units {
@@ -27,12 +27,8 @@ body {
 }
 
 .location {
-  padding-bottom: 20px;
-}
-
-.temp {
-  margin-top: 65px;
-  font-size: 5em;
+  margin-top: 40px;
+  letter-spacing: 0.1em;
 }
 
 .text-danger {
@@ -41,12 +37,9 @@ body {
 }
 
 .wi {
-  padding: 40px;
-  font-size: 6em;
+  padding: 30px;
+  font-size: 8em;
 }
-
-
-
 
 /* 
   A CSS spinner loader
