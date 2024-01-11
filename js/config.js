@@ -7,9 +7,7 @@ window.process = {
 
 const loadEnvironmentVariables = async () => {
   const response = await fetch('../.env');
-  console.log(response);
   const text = await response.text();
-  console.log('text', text);
   const lines = text.split('\n');
 
   lines.forEach((line) => {
@@ -18,8 +16,6 @@ const loadEnvironmentVariables = async () => {
       window.process.env[key.trim()] = value.trim();
     }
   });
-
-  console.log('window.process.env', window.process.env);
 };
 
 const config = {

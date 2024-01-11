@@ -118,7 +118,7 @@ import config from './config.js';
         });
       })
       .catch(function (error) {
-        console.log('Something went wrong. ', error);
+        console.error('Something went wrong. ', error);
         ajaxPanel.innerHTML =
           '<p class="text-danger text-center">Geolocation is not supported by your Browser, or was canceled by user.</p>';
       });
