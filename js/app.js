@@ -1,28 +1,31 @@
-(function() {
+import config from './config.js';
 
+(function async() {
+  config.initialize();
   var ajaxPanel = document.getElementById('ajax-panel');
 
   function success(position) {
-
     var lat = position.coords.latitude;
     var lon = position.coords.longitude;
 
-    var config = {
-      baseUrl: 'https://api.openweathermap.org/data/2.5/weather?',
-      apiKey: 'a0c73d6d433683c9d60648536464f183',
-    };
+    var url =
+      process.env.API_URL +
+      'lat=' +
+      lat +
+      '&lon=' +
+      lon +
+      '&units=metric' +
+      '&appid=' +
+      process.env.API_KEY;
 
-    var url = config.baseUrl + 'lat=' + lat + '&lon=' + lon + '&units=metric' + '&appid=' + config.apiKey;
-
-    // Using the new fetch API 
+    // Using the new fetch API
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 
-    fetch(url).then(
-      function(response) {
+    fetch(url)
+      .then(function (response) {
         return response.json();
-      }
-    ).then(
-      function(jsonData) {
+      })
+      .then(function (jsonData) {
         //handle json data processing here
         var location = jsonData.name;
         var countryCode = jsonData.sys.country;
@@ -33,7 +36,7 @@
         var code = jsonData.weather[0].id;
 
         // weatherIcons is a global array defined in a separate file
-        var icon = weatherIcons[code].icon
+        var icon = weatherIcons[code].icon;
 
         // If we are not in the ranges mentioned above, add a day/night prefix
         if (!(code > 699 && code < 800) && !(code > 899 && code < 1000)) {
@@ -47,7 +50,7 @@
         var celsius = jsonData.main.temp;
 
         // F = C x 1.8 + 32
-        var farenheit = celsius * 1.8 + 32
+        var farenheit = celsius * 1.8 + 32;
 
         var currentTemperature = celsius;
 
@@ -69,10 +72,6 @@
         units.appendChild(divider);
         units.appendChild(farenheitElement);
 
-
-        
-
-
         // Create the neceesary elements and then add them to the DOM
         var temperatureELement = document.createElement('p');
         temperatureELement.id = 'temperature';
@@ -80,10 +79,15 @@
         temperatureELement.textContent = currentTemperature + '°';
 
         var weatherElement = document.createElement('i');
-        weatherElement.className = icon
+        weatherElement.className = icon;
 
         var locationElement = document.createElement('p');
-        locationElement.textContent = 'It looks like you\'re located in ' + location + ', ' + countryCode + '.';
+        locationElement.textContent =
+          "It looks like you're located in " +
+          location +
+          ', ' +
+          countryCode +
+          '.';
 
         // Remove the loader spinner
         ajaxPanel.innerHTML = '';
@@ -93,8 +97,7 @@
         ajaxPanel.appendChild(units);
         ajaxPanel.appendChild(locationElement);
 
-
-        var temperatureSelect = function(unit) {
+        var temperatureSelect = function (unit) {
           if (unit === 'c') {
             currentTemperature = celsius;
           } else {
@@ -102,38 +105,35 @@
           }
 
           return currentTemperature;
+        };
 
-        }
-
-        celsiusElement.addEventListener('click', function() {
-          document.getElementById('temperature')
-            .textContent = temperatureSelect('c');
+        celsiusElement.addEventListener('click', function () {
+          document.getElementById('temperature').textContent =
+            temperatureSelect('c');
         });
 
-
-        farenheitElement.addEventListener('click', function() {
-          document.getElementById('temperature')
-            .textContent = temperatureSelect('f');
+        farenheitElement.addEventListener('click', function () {
+          document.getElementById('temperature').textContent =
+            temperatureSelect('f');
         });
-
-
-      }
-
-    ).catch(function(error) {
-      console.log("Something went wrong. ", error)
-      ajaxPanel.innerHTML = '<p class="text-danger text-center">Geolocation is not supported by your Browser, or was canceled by user.</p>';
-    });
-
+      })
+      .catch(function (error) {
+        console.log('Something went wrong. ', error);
+        ajaxPanel.innerHTML =
+          '<p class="text-danger text-center">Geolocation is not supported by your Browser, or was canceled by user.</p>';
+      });
   }
 
   function error() {
-    console.log('Geolocation is not supported by your Browser, or was canceled by user.');
-    setTimeout(function() {
+    console.log(
+      'Geolocation is not supported by your Browser, or was canceled by user.'
+    );
+    setTimeout(function () {
       ajaxPanel.innerHTML = '';
-      ajaxPanel.innerHTML = '<p class="text-danger text-center">Geolocation is not supported by your Browser, or was canceled by user.</p>';
+      ajaxPanel.innerHTML =
+        '<p class="text-danger text-center">Geolocation is not supported by your Browser, or was canceled by user.</p>';
     }, 1);
   }
 
   navigator.geolocation.getCurrentPosition(success, error);
-
 })();
