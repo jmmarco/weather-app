@@ -1,39 +1,42 @@
-(function() {
+import config from './config.js';
 
-  var ajaxPanel = document.getElementById('ajax-panel');
+(function async() {
+  config.initialize();
+  const ajaxPanel = document.getElementById('ajax-panel');
 
   function success(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
 
-    var lat = position.coords.latitude;
-    var lon = position.coords.longitude;
+    const url =
+      process.env.API_URL +
+      'lat=' +
+      lat +
+      '&lon=' +
+      lon +
+      '&units=metric' +
+      '&appid=' +
+      process.env.API_KEY;
 
-    var config = {
-      baseUrl: 'https://api.openweathermap.org/data/2.5/weather?',
-      apiKey: 'a0c73d6d433683c9d60648536464f183',
-    };
-
-    var url = config.baseUrl + 'lat=' + lat + '&lon=' + lon + '&units=metric' + '&appid=' + config.apiKey;
-
-    // Using the new fetch API 
+    // Using the new fetch API
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 
-    fetch(url).then(
-      function(response) {
+    fetch(url)
+      .then(function (response) {
         return response.json();
-      }
-    ).then(
-      function(jsonData) {
+      })
+      .then(function (jsonData) {
         //handle json data processing here
-        var location = jsonData.name;
-        var countryCode = jsonData.sys.country;
+        const location = jsonData.name;
+        const countryCode = jsonData.sys.country;
 
         // Thanks to Tim Brayen for the inspiration:
         // https://gist.github.com/tbranyen/62d974681dea8ee0caa1
-        var prefix = 'wi wi-';
-        var code = jsonData.weather[0].id;
+        const prefix = 'wi wi-';
+        const code = jsonData.weather[0].id;
 
         // weatherIcons is a global array defined in a separate file
-        var icon = weatherIcons[code].icon
+        let icon = weatherIcons[code].icon;
 
         // If we are not in the ranges mentioned above, add a day/night prefix
         if (!(code > 699 && code < 800) && !(code > 899 && code < 1000)) {
@@ -44,46 +47,47 @@
         icon = prefix + icon;
 
         // Set the temperature
-        var celsius = jsonData.main.temp;
+        const celsius = jsonData.main.temp;
 
         // F = C x 1.8 + 32
-        var farenheit = celsius * 1.8 + 32
+        const fahrenheit = celsius * 1.8 + 32;
 
-        var currentTemperature = celsius;
+        const currentTemperature = celsius;
 
-        var units = document.createElement('div');
+        const units = document.createElement('div');
         units.className = 'units';
 
-        var celsiusElement = document.createElement('a');
+        const celsiusElement = document.createElement('a');
         celsiusElement.className = 'celsius';
         celsiusElement.href = '#';
         celsiusElement.textContent = 'C';
-        var divider = document.createElement('span');
+        const divider = document.createElement('span');
         divider.textContent = '|';
-        var farenheitElement = document.createElement('a');
-        farenheitElement.className = 'farenheit';
-        farenheitElement.href = '#';
-        farenheitElement.textContent = 'F';
+        const fahrenheitElement = document.createElement('a');
+        fahrenheitElement.className = 'fahrenheit';
+        fahrenheitElement.href = '#';
+        fahrenheitElement.textContent = 'F';
 
         units.appendChild(celsiusElement);
         units.appendChild(divider);
-        units.appendChild(farenheitElement);
+        units.appendChild(fahrenheitElement);
 
-
-        
-
-
-        // Create the neceesary elements and then add them to the DOM
-        var temperatureELement = document.createElement('p');
+        // Create the necessary elements and then add them to the DOM
+        const temperatureELement = document.createElement('p');
         temperatureELement.id = 'temperature';
         // temperatureELement += '°' + units
         temperatureELement.textContent = currentTemperature + '°';
 
-        var weatherElement = document.createElement('i');
-        weatherElement.className = icon
+        const weatherElement = document.createElement('i');
+        weatherElement.className = icon;
 
-        var locationElement = document.createElement('p');
-        locationElement.textContent = 'It looks like you\'re located in ' + location + ', ' + countryCode + '.';
+        const locationElement = document.createElement('p');
+        locationElement.textContent =
+          "It looks like you're located in " +
+          location +
+          ', ' +
+          countryCode +
+          '.';
 
         // Remove the loader spinner
         ajaxPanel.innerHTML = '';
@@ -93,47 +97,43 @@
         ajaxPanel.appendChild(units);
         ajaxPanel.appendChild(locationElement);
 
-
-        var temperatureSelect = function(unit) {
+        const temperatureSelect = function (unit) {
           if (unit === 'c') {
             currentTemperature = celsius;
           } else {
-            currentTemperature = farenheit.toFixed(1);
+            currentTemperature = fahrenheit.toFixed(1);
           }
 
           return currentTemperature;
+        };
 
-        }
-
-        celsiusElement.addEventListener('click', function() {
-          document.getElementById('temperature')
-            .textContent = temperatureSelect('c');
+        celsiusElement.addEventListener('click', function () {
+          document.getElementById('temperature').textContent =
+            temperatureSelect('c');
         });
 
-
-        farenheitElement.addEventListener('click', function() {
-          document.getElementById('temperature')
-            .textContent = temperatureSelect('f');
+        fahrenheitElement.addEventListener('click', function () {
+          document.getElementById('temperature').textContent =
+            temperatureSelect('f');
         });
-
-
-      }
-
-    ).catch(function(error) {
-      console.log("Something went wrong. ", error)
-      ajaxPanel.innerHTML = '<p class="text-danger text-center">Geolocation is not supported by your Browser, or was canceled by user.</p>';
-    });
-
+      })
+      .catch(function (error) {
+        console.error('Something went wrong. ', error);
+        ajaxPanel.innerHTML =
+          '<p class="text-danger text-center">Geolocation is not supported by your Browser, or was canceled by user.</p>';
+      });
   }
 
   function error() {
-    console.log('Geolocation is not supported by your Browser, or was canceled by user.');
-    setTimeout(function() {
+    console.log(
+      'Geolocation is not supported by your Browser, or was canceled by user.'
+    );
+    setTimeout(function () {
       ajaxPanel.innerHTML = '';
-      ajaxPanel.innerHTML = '<p class="text-danger text-center">Geolocation is not supported by your Browser, or was canceled by user.</p>';
+      ajaxPanel.innerHTML =
+        '<p class="text-danger text-center">Geolocation is not supported by your Browser, or was canceled by user.</p>';
     }, 1);
   }
 
   navigator.geolocation.getCurrentPosition(success, error);
-
 })();

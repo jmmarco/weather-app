@@ -1,7 +1,18 @@
 # A simple weather app that uses the [OpenWeatherMap API](https://openweathermap.org/current)
 
 ## Quickstart
-- Clone the repository and open `index.html` in a Browser window
+
+- Clone the repository
+- Sign up and get an API key from [OpenWeatherMap](https://openweathermap.org)
+- [Get the current API URL](https://openweathermap.org/current), typically it will be: `https://api.openweathermap.org/data/2.5/weather?`
+- Rename `.env.example` to `.env` file and add your API key and API URL
+- To run the project use a local server like [http-server](https://www.npmjs.com/package/http-server)
+
+  Open the console from the project directory and run it like this:
+
+  ```bash
+  npx http-server
+  ```
 
 ### Details
 

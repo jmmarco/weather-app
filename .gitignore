@@ -1,0 +1,5 @@
+# Enviromrent variables
+.env
+
+# Mac OS specific files
+.DS_Store
