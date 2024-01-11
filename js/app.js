@@ -2,13 +2,13 @@ import config from './config.js';
 
 (function async() {
   config.initialize();
-  var ajaxPanel = document.getElementById('ajax-panel');
+  const ajaxPanel = document.getElementById('ajax-panel');
 
   function success(position) {
-    var lat = position.coords.latitude;
-    var lon = position.coords.longitude;
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
 
-    var url =
+    const url =
       process.env.API_URL +
       'lat=' +
       lat +
@@ -27,16 +27,16 @@ import config from './config.js';
       })
       .then(function (jsonData) {
         //handle json data processing here
-        var location = jsonData.name;
-        var countryCode = jsonData.sys.country;
+        const location = jsonData.name;
+        const countryCode = jsonData.sys.country;
 
         // Thanks to Tim Brayen for the inspiration:
         // https://gist.github.com/tbranyen/62d974681dea8ee0caa1
-        var prefix = 'wi wi-';
-        var code = jsonData.weather[0].id;
+        const prefix = 'wi wi-';
+        const code = jsonData.weather[0].id;
 
         // weatherIcons is a global array defined in a separate file
-        var icon = weatherIcons[code].icon;
+        let icon = weatherIcons[code].icon;
 
         // If we are not in the ranges mentioned above, add a day/night prefix
         if (!(code > 699 && code < 800) && !(code > 899 && code < 1000)) {
@@ -47,41 +47,41 @@ import config from './config.js';
         icon = prefix + icon;
 
         // Set the temperature
-        var celsius = jsonData.main.temp;
+        const celsius = jsonData.main.temp;
 
         // F = C x 1.8 + 32
-        var farenheit = celsius * 1.8 + 32;
+        const fahrenheit = celsius * 1.8 + 32;
 
-        var currentTemperature = celsius;
+        const currentTemperature = celsius;
 
-        var units = document.createElement('div');
+        const units = document.createElement('div');
         units.className = 'units';
 
-        var celsiusElement = document.createElement('a');
+        const celsiusElement = document.createElement('a');
         celsiusElement.className = 'celsius';
         celsiusElement.href = '#';
         celsiusElement.textContent = 'C';
-        var divider = document.createElement('span');
+        const divider = document.createElement('span');
         divider.textContent = '|';
-        var farenheitElement = document.createElement('a');
-        farenheitElement.className = 'farenheit';
-        farenheitElement.href = '#';
-        farenheitElement.textContent = 'F';
+        const fahrenheitElement = document.createElement('a');
+        fahrenheitElement.className = 'fahrenheit';
+        fahrenheitElement.href = '#';
+        fahrenheitElement.textContent = 'F';
 
         units.appendChild(celsiusElement);
         units.appendChild(divider);
-        units.appendChild(farenheitElement);
+        units.appendChild(fahrenheitElement);
 
-        // Create the neceesary elements and then add them to the DOM
-        var temperatureELement = document.createElement('p');
+        // Create the necessary elements and then add them to the DOM
+        const temperatureELement = document.createElement('p');
         temperatureELement.id = 'temperature';
         // temperatureELement += '°' + units
         temperatureELement.textContent = currentTemperature + '°';
 
-        var weatherElement = document.createElement('i');
+        const weatherElement = document.createElement('i');
         weatherElement.className = icon;
 
-        var locationElement = document.createElement('p');
+        const locationElement = document.createElement('p');
         locationElement.textContent =
           "It looks like you're located in " +
           location +
@@ -97,11 +97,11 @@ import config from './config.js';
         ajaxPanel.appendChild(units);
         ajaxPanel.appendChild(locationElement);
 
-        var temperatureSelect = function (unit) {
+        const temperatureSelect = function (unit) {
           if (unit === 'c') {
             currentTemperature = celsius;
           } else {
-            currentTemperature = farenheit.toFixed(1);
+            currentTemperature = fahrenheit.toFixed(1);
           }
 
           return currentTemperature;
@@ -112,7 +112,7 @@ import config from './config.js';
             temperatureSelect('c');
         });
 
-        farenheitElement.addEventListener('click', function () {
+        fahrenheitElement.addEventListener('click', function () {
           document.getElementById('temperature').textContent =
             temperatureSelect('f');
         });
